@@ -8,9 +8,9 @@ module Airbrake
       return unless exception.backtrace?
       (exception.backtrace || [] of String).map do |stackframe|
         if m = stackframe.match(STACKFRAME_TEMPLATE)
-          { file: m[1]? || "<crystal>" , line: m[2]?.try(&.to_i) || 0, function: m[4]? || "<file>" }
+          {file: m[1]? || "<crystal>", line: m[2]?.try(&.to_i) || 0, function: m[4]? || "<file>"}
         else
-          { file: "<crystal>", line: 0, function: "<file>" }
+          {file: "<crystal>", line: 0, function: "<file>"}
         end
       end
     end
@@ -22,7 +22,7 @@ module Airbrake
             json.object do
               json.field "name", Airbrake.config.user_agent
               json.field "version", Airbrake::VERSION
-              json.field "url", "https://github.com/klacointe/airbrake.cr"
+              json.field "url", "https://github.com/romul/airbrake.cr"
             end
           end
           json.field "errors" do
@@ -39,6 +39,8 @@ module Airbrake
               json.field "language", Crystal::DESCRIPTION
               json.field "build", Crystal::BUILD_DATE
               json.field "commit", Crystal::BUILD_COMMIT
+              json.field "environment", ENV.fetch("CRYSTAL_ENV", "N/A")
+              json.field "hostname", System.hostname
             end
           end
           json.field "environment" do
