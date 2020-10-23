@@ -21,8 +21,8 @@ Airbrake.configure do |config|
   config.project_id = "1234"
   config.project_key = "123456789"
 
-  # Optional, use airbrake endpoint by default
-  config.endpoint = "http://host.tld"
+  # Optional, use airbrake domain by default
+  config.domain = "host.tld"
   # Optional, use ["development", "test"] by default
   config.development_environments = ["development", "test"]
 end

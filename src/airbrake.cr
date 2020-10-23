@@ -2,7 +2,6 @@ require "./airbrake/*"
 require "http/client"
 
 module Airbrake
-
   def self.handle(&block)
     begin
       yield
@@ -15,11 +14,14 @@ module Airbrake
   def self.notify(exception, params = {} of String => String)
     return unless should_notify?
     check_config!
-    response = HTTP::Client.post(
-      Airbrake.config.uri,
+    client = HTTP::Client.new(Airbrake.config.domain)
+    client.read_timeout = 1
+    client.write_timeout = 1
+    response = client.post(
+      Airbrake.config.path,
       headers: HTTP::Headers{
         "Content-Type" => "application/json",
-        "User-Agent" => Airbrake.config.user_agent
+        "User-Agent"   => Airbrake.config.user_agent,
       },
       body: Airbrake::Error.payload(exception, params)
     )
