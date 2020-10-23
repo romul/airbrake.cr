@@ -25,7 +25,7 @@ module Airbrake
       },
       body: Airbrake::Error.payload(exception, params)
     )
-    Hash(String, String).from_json(response.body)
+    nil
   end
 
   def self.should_notify?
